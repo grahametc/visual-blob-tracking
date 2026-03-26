@@ -3,7 +3,7 @@ import numpy as np
 
 
 def tst():
-    cap = cv.VideoCapture("sugar.mp4")
+    cap = cv.VideoCapture("astro.mp4")
 
     if cap.isOpened():
         print("cont")
@@ -23,13 +23,16 @@ def tst():
         _, binary = cv.threshold(gray, 127, 255, cv.THRESH_BINARY)
         (contours, hierarchy) = cv.findContours(binary, cv.RETR_EXTERNAL,cv.CHAIN_APPROX_SIMPLE)
         if len(contours)>0:
-            contour= max(contours,key=cv.contourArea)
-            print(contour)
-            area = cv.contourArea(contour)
-            if area>800:
-                x,y,w,h = cv.boundingRect(contour)
-                cv.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),2)
-                output.write(frame)
+            blobs = 0
+            for contour in contours:
+                print(contour)
+                area = cv.contourArea(contour)
+                if area>100:
+                    blobs+=1
+                    x,y,w,h = cv.boundingRect(contour)
+                    cv.rectangle(frame,(x,y),(x+w,y+h),(255,255,255),1)
+                    cv.putText(frame, str(blobs), (x, y+20), cv.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 1)
+            output.write(frame)
        
     cv.destroyAllWindows() 
         
